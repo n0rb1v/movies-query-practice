@@ -13,4 +13,7 @@ public interface StudioRepository extends JpaRepository<Studio,Long> {
 
     @Query("select s from Studio s join fetch s.movies m join fetch m.actors a where a.name = :name")
     List<Studio> listStudioByActor(@Param("name") String name);
+
+    @Query("select distinct s from Studio s join fetch s.movies m join fetch m.actors a where a.movies.size > 1")
+    List<Studio> listStudioByActorsWithMoreMovies();
 }

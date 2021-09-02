@@ -22,6 +22,7 @@ class MovieRepositoryTest {
     Actor actor1;
     Actor actor2;
     Actor actor3;
+    Actor actor4;
     Movie movie1;
     Movie movie2;
     Movie movie3;
@@ -33,6 +34,8 @@ class MovieRepositoryTest {
         actor1 = new Actor("John Doe", LocalDate.of(1991,8,11));
         actor2 = new Actor("Arnold S.", LocalDate.of(1951,7,12));
         actor3 = new Actor("Bruce W.", LocalDate.of(1961,6,13));
+        actor4 = new Actor("John T.", LocalDate.of(1966,6,17));
+
         movie1 = new Movie("Titanic",1997);
         movie2 = new Movie("Terminator",1984);
         movie3 = new Movie("Star Wars",1978);
@@ -41,8 +44,8 @@ class MovieRepositoryTest {
 
         movie1.addActor(actor1);
         movie1.addActor(actor3);
-        movie2.addActor(actor1);
         movie2.addActor(actor2);
+        movie2.addActor(actor4);
         movie3.addActor(actor1);
         movie3.addActor(actor3);
         studio1.addMovie(movie3);
@@ -57,6 +60,7 @@ class MovieRepositoryTest {
         actorRepository.save(actor1);
         actorRepository.save(actor2);
         actorRepository.save(actor3);
+        actorRepository.save(actor4);
     }
 
     @Test
@@ -92,7 +96,7 @@ class MovieRepositoryTest {
         List<Actor> actors = actorRepository.listActorByMovie("Terminator");
         assertThat(actors)
                 .extracting(Actor::getName)
-                .containsOnly("John Doe","Arnold S.");
+                .containsOnly("John T.","Arnold S.");
     }
     @Test
     void test6(){
@@ -108,5 +112,11 @@ class MovieRepositoryTest {
                 .extracting(Studio::getName)
                 .containsOnly("Warner");
     }
-
+    @Test
+    void bonus(){
+        List<Studio> studios = studioRepository.listStudioByActorsWithMoreMovies();
+        assertThat(studios)
+                .extracting(Studio::getName)
+                .containsOnly("Disney");
+    }
 }
